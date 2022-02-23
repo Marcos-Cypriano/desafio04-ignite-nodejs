@@ -9,7 +9,20 @@ class ListAllUsersUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ user_id }: IRequest): User[] {
-    // Complete aqui
+    const user = this.usersRepository.findById(user_id);
+
+    if (!user) {
+      throw new Error("User does not exists!");
+    }
+    if (!user.admin) {
+      throw new Error(
+        "Your user account does not have the license to list all users!"
+      );
+    }
+
+    const users = this.usersRepository.list();
+
+    return users;
   }
 }
 
