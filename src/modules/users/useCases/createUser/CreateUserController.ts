@@ -9,12 +9,11 @@ class CreateUserController {
     const { name, email } = request.body;
 
     try {
-      this.createUserUseCase.execute({ email, name });
+      const user = this.createUserUseCase.execute({ email, name });
+      return response.status(201).json(user);
     } catch (Error) {
-      return response.status(400).send();
+      return response.status(400).json({ error: Error.message });
     }
-
-    return response.status(201).send();
   }
 }
 
