@@ -1,0 +1,330 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Desafio 05 Documentation",
+        "description": "Back-end API to create, list, get and alter users.",
+        "version": "1.0.0",
+        "contact": "marcos@cypriano.com"
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Create User",
+                "description": "This route receives a name, email and, optionally admin to create a user.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "admin": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "example": {
+                                    "name": "Marcos Cypriano",
+                                    "email": "marcos@cypriano.com"
+                                }
+                            }
+                            
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "date"
+                                        },
+                                        "updated_at": {
+                                            "type": "date"
+                                        }
+                                    },
+                                    "example": {
+                                        "name": "Lucas Cypriano",
+                                        "email": "lucas@cypriano.com",
+                                        "admin": false,
+                                        "id": "df78bc26-7398-42bb-8bb0-282030aa730c",
+                                        "created_at": "2022-02-24T17:10:59.638Z",
+                                        "updated_at": "2022-02-24T17:10:59.638Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User already exists!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "error": "User already exists!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["Users"],
+                "summary": "List Users",
+                "description": "This route receives an user id throught the header, and if the user is admin, returns a list of all users.",
+                "parameters": [{
+                    "in": "header",
+                    "name": "user_id",
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "required": "true"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "date"
+                                        },
+                                        "updated_at": {
+                                            "type": "date"
+                                        }
+                                    },
+                                    "example": [{
+                                        "name": "Marcos Cypriano",
+                                        "email": "marcos@cypriano.com",
+                                        "admin": true,
+                                        "id": "0fcc366c-76f8-4463-a89b-9edb124de984",
+                                        "created_at": "2022-02-24T17:10:24.342Z",
+                                        "updated_at": "2022-02-24T17:10:59.638Z"
+                                    },
+                                    {
+                                        "name": "Lucas Cypriano",
+                                        "email": "lucas@cypriano.com",
+                                        "admin": false,
+                                        "id": "df78bc26-7398-42bb-8bb0-282030aa730c",
+                                        "created_at": "2022-02-24T17:10:59.638Z",
+                                        "updated_at": "2022-02-24T17:10:59.638Z"
+                                    }
+                                ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User does not exists or doesn't have permission.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "error": "Your user account does not have the license to list all users!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get user",
+                "description": "This route receives an user id throught it's path and returns the user's info.",
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "required": "true"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "date"
+                                        },
+                                        "updated_at": {
+                                            "type": "date"
+                                        }
+                                    },
+                                    "example": {
+                                        "name": "Marcos Cypriano",
+                                        "email": "marcos@cypriano.com",
+                                        "admin": false,
+                                        "id": "0fcc366c-76f8-4463-a89b-9edb124de984",
+                                        "created_at": "2022-02-24T17:10:24.342Z",
+                                        "updated_at": "2022-02-24T17:10:59.638Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User does not exists.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "error": "User not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Alter user",
+                "description": "This route receives an user id and alter its admin status to true.",
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid",
+                        "required": "true"
+                    }
+                }],
+                "responses": {
+                    "202": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "date"
+                                        },
+                                        "updated_at": {
+                                            "type": "date"
+                                        }
+                                    },
+                                    "example": {
+                                        "name": "Marcos Cypriano",
+                                        "email": "marcos@cypriano.com",
+                                        "admin": true,
+                                        "id": "0fcc366c-76f8-4463-a89b-9edb124de984",
+                                        "created_at": "2022-02-24T17:10:24.342Z",
+                                        "updated_at": "2022-02-24T17:11:59.638Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User does not exists.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "error": "User not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
